@@ -3,8 +3,8 @@
 
 Summary:	The Enlightened Sound Daemon
 Name:		esound
-Version: 0.2.37
-Release: %mkrel 3
+Version: 0.2.38
+Release: %mkrel 1
 License:	LGPL
 Group:		System/Servers
 
@@ -13,8 +13,6 @@ Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/esound/esound-%{version}.tar.bz2
 Patch0:		esound-0.2.37-defaultoptions.patch
 # (fc) 0.2.28-3mdk don't add -L/usr/lib to ldflags
 Patch2:		esound-0.2.35-libdir.patch
-# (fc) 0.2.37-2mdv fix 99% cpu and fd leaks (SVN) (Mdv bug #29640)
-Patch3:		esound-0.2.37-svnfixes.patch
 URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 BuildRequires: audiofile-devel
@@ -55,7 +53,6 @@ applications.
 %setup -q
 %patch0 -p1 -b .defaultoptions
 %patch2 -p1 -b .libdir
-%patch3 -p1 -b .svnfixes
 
 %build
 
