@@ -4,15 +4,15 @@
 Summary:	The Enlightened Sound Daemon
 Name:		esound
 Version: 0.2.38
-Release: %mkrel 2
+Release: %mkrel 3
 License:	LGPL
 Group:		System/Servers
 
 Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/esound/esound-%{version}.tar.bz2
 # (fc) 0.2.28 default options : increase spawn process waiting time, release device after 2s of inactivity
 Patch0:		esound-0.2.37-defaultoptions.patch
-# (fc) 0.2.28-3mdk don't add -L/usr/lib to ldflags
-Patch2:		esound-0.2.35-libdir.patch
+# (fc) 0.2.28-3mdk don't add -L/usr/lib to ldflags (GNOME bug #435652)
+Patch2:		esound-multilib.patch
 # (fc) 0.2.38-2mdv protect dsp_init with a mutex to prevent race conditions from multiple calls (Ubuntu)
 Patch3:		esound-0.2.38-preventlock.patch
 URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
@@ -54,7 +54,7 @@ applications.
 %prep
 %setup -q
 %patch0 -p1 -b .defaultoptions
-%patch2 -p1 -b .libdir
+%patch2 -p1 -b .multilib
 %patch3 -p1 -b .preventlock
 
 %build
