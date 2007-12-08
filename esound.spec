@@ -4,7 +4,7 @@
 Summary:	The Enlightened Sound Daemon
 Name:		esound
 Version: 0.2.38
-Release: %mkrel 3
+Release: %mkrel 4
 License:	LGPL
 Group:		System/Servers
 
@@ -15,6 +15,8 @@ Patch0:		esound-0.2.37-defaultoptions.patch
 Patch2:		esound-multilib.patch
 # (fc) 0.2.38-2mdv protect dsp_init with a mutex to prevent race conditions from multiple calls (Ubuntu)
 Patch3:		esound-0.2.38-preventlock.patch
+# (cg) 0.2.38-4mdk multi-user patch for esd to assume the socket path is /tmp/.esd-$USER/socket
+Patch4: 	esound-0.2.38-multi-user.patch
 URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 BuildRequires: audiofile-devel
@@ -28,11 +30,24 @@ applications won't have to jockey for the attention of your sound card.
 
 EsounD mixes several audio streams for playback by a single audio device.
 
+%package daemon
+Summary: Original EsounD daemon (now superceeded by PulseAudio)
+Group: Sound
+
+%description daemon
+The original EsounD daemon (now superceeded by PulseAudio)
+
+%package utils
+Summary: Utilities for EsounD
+Group: Sound
+
+%description utils
+Utility applications for EsounD
+
 %package -n %{libname}
 Summary: Libraries for EsounD
 Group: System/Libraries
 Provides: libesound
-Requires: esound >= %{version}-%{release}
 
 %description -n %{libname}
 These are the libraries for EsounD.
@@ -40,7 +55,6 @@ These are the libraries for EsounD.
 %package -n %{libname}-devel
 Summary:	Includes and more to develop EsounD applications
 Group:		Development/C
-Requires:	%{name} = %{version}
 Requires:	audiofile-devel 
 Requires:	%{libname} = %{version}
 Provides: 	libesound-devel
@@ -56,6 +70,7 @@ applications.
 %patch0 -p1 -b .defaultoptions
 %patch2 -p1 -b .multilib
 %patch3 -p1 -b .preventlock
+%patch4 -p1 -b .multiuser
 
 %build
 
@@ -73,12 +88,15 @@ mv %buildroot%_datadir/doc/esound installed-docs
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files daemon
+%config(noreplace) %{_sysconfdir}/esd.conf
+%{_bindir}/esd
+%{_mandir}/man1/esd.1*
+
+%files utils
 %defattr(-, root, root)
 %doc installed-docs/*
 %doc AUTHORS INSTALL NEWS README TIPS TODO
-%config(noreplace) %{_sysconfdir}/esd.conf
-%{_bindir}/esd
 %{_bindir}/esdcat
 %{_bindir}/esdctl
 %{_bindir}/esddsp
@@ -88,7 +106,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/esdplay
 %{_bindir}/esdrec
 %{_bindir}/esdsample
-%{_mandir}/man1/esd.1*
 %{_mandir}/man1/esd[a-z]*
 
 %files -n %{libname}
