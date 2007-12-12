@@ -4,7 +4,7 @@
 Summary:	The Enlightened Sound Daemon
 Name:		esound
 Version: 0.2.38
-Release: %mkrel 4
+Release: %mkrel 5
 License:	LGPL
 Group:		System/Servers
 
@@ -33,6 +33,7 @@ EsounD mixes several audio streams for playback by a single audio device.
 %package daemon
 Summary: Original EsounD daemon (now superceeded by PulseAudio)
 Group: Sound
+Provides: esound = %{version}-%{release}
 
 %description daemon
 The original EsounD daemon (now superceeded by PulseAudio)
@@ -48,6 +49,7 @@ Utility applications for EsounD
 Summary: Libraries for EsounD
 Group: System/Libraries
 Provides: libesound
+Requires: esound
 
 %description -n %{libname}
 These are the libraries for EsounD.
