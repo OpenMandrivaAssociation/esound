@@ -18,7 +18,6 @@ Patch3:		esound-0.2.38-preventlock.patch
 # (cg) 0.2.38-4mdk multi-user patch for esd to assume the socket path is /tmp/.esd-$USER/socket
 Patch4: 	esound-0.2.38-multi-user.patch
 URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 BuildRequires: audiofile-devel
 BuildRequires: docbook-utils docbook-dtd31-sgml
 
