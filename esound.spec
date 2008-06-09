@@ -84,8 +84,12 @@ rm -rf %buildroot installed-docs
 %makeinstall_std
 mv %buildroot%_datadir/doc/esound installed-docs
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
