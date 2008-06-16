@@ -4,7 +4,7 @@
 Summary:	The Enlightened Sound Daemon
 Name:		esound
 Version: 0.2.38
-Release: %mkrel 6
+Release: %mkrel 7
 License:	LGPL
 Group:		System/Servers
 
