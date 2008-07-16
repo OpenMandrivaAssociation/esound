@@ -17,7 +17,7 @@ Patch3:		esound-0.2.38-preventlock.patch
 URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 BuildRequires: audiofile-devel
-BuildRequires: docbook-utils docbook-dtd31-sgml
+BuildRequires: docbook-utils docbook-dtd412-xml
 
 %description
 EsounD (the Enlightened Sound Daemon) is a server process that allows multiple
