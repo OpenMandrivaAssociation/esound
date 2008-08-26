@@ -1,5 +1,6 @@
 %define major	0
 %define libname	%mklibname esound %{major}
+%define develname %mklibname esound -d
 
 Summary:	The Enlightened Sound Daemon
 Name:		esound
@@ -51,16 +52,16 @@ Requires: esound
 %description -n %{libname}
 These are the libraries for EsounD.
 
-%package -n %{libname}-devel
+%package -n %{develname}
 Summary:	Includes and more to develop EsounD applications
 Group:		Development/C
 Requires:	audiofile-devel 
 Requires:	%{libname} = %{version}
 Provides: 	libesound-devel
 Provides:	esound-devel
-Obsoletes:  esound-devel
+Obsoletes: 	%{libname}-devel
 
-%description -n %{libname}-devel
+%description -n %{develname}
 Libraries, include files and other resources you can use to develop EsounD
 applications.
 
@@ -88,7 +89,7 @@ mv %buildroot%_datadir/doc/esound installed-docs
 %endif
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files daemon
 %config(noreplace) %{_sysconfdir}/esd.conf
@@ -112,9 +113,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %{libname}
 %defattr(-,root,root)
-%{_libdir}/lib*.so.*
+%{_libdir}/lib*.so.%{major}*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(-, root, root)
 %{_bindir}/esd-config
 %{_includedir}/*
