@@ -4,7 +4,7 @@
 
 Summary:	The Enlightened Sound Daemon
 Name:		esound
-Version: 0.2.39
+Version: 0.2.40
 Release: %mkrel 1
 License:	LGPLv2+
 Group:		System/Servers
@@ -13,7 +13,6 @@ Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/esound/esound-%{version}.tar.bz2
 # (fc) 0.2.28 default options : increase spawn process waiting time, release device after 2s of inactivity
 Patch0:		esound-0.2.37-defaultoptions.patch
 # (fc) 0.2.38-2mdv protect dsp_init with a mutex to prevent race conditions from multiple calls (Ubuntu)
-Patch1: 	esound-0.2.39-missing-header.patch
 Patch3:		esound-0.2.38-preventlock.patch
 URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
@@ -68,7 +67,6 @@ applications.
 %prep
 %setup -q
 %patch0 -p1 -b .defaultoptions
-%patch1 -p1
 %patch3 -p1 -b .preventlock
 
 %build
