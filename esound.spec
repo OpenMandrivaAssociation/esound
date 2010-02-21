@@ -5,7 +5,7 @@
 Summary:	The Enlightened Sound Daemon
 Name:		esound
 Version: 0.2.41
-Release: %mkrel 2
+Release: %mkrel 3
 License:	LGPLv2+
 Group:		System/Servers
 
@@ -24,14 +24,6 @@ to music from your CD and you receive a sound-related event from ICQ, your
 applications won't have to jockey for the attention of your sound card.
 
 EsounD mixes several audio streams for playback by a single audio device.
-
-%package daemon
-Summary: Original EsounD daemon (now superceeded by PulseAudio)
-Group: Sound
-Provides: esound = %{version}-%{release}
-
-%description daemon
-The original EsounD daemon (now superceeded by PulseAudio)
 
 %package utils
 Summary: Utilities for EsounD
@@ -76,6 +68,9 @@ rm -rf %buildroot installed-docs
 %makeinstall_std
 mv %buildroot%_datadir/doc/esound installed-docs
 
+# (cg) We no longer ship the actual deamon - PulseAudio does this these days
+rm -f %{buildroot}%{_sysconfdir}/esd.conf %{buildroot}%{_bindir}/esd %{buildroot}%{_mandir}/man1/esd.1*
+
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
 %endif
@@ -85,11 +80,6 @@ mv %buildroot%_datadir/doc/esound installed-docs
 
 %clean
 rm -rf %{buildroot}
-
-%files daemon
-%config(noreplace) %{_sysconfdir}/esd.conf
-%{_bindir}/esd
-%{_mandir}/man1/esd.1*
 
 %files utils
 %defattr(-, root, root)
