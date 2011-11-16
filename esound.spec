@@ -64,7 +64,7 @@ applications.
 	--with-libwrap \
 	--disable-alsa
 
-%make
+%make LIBS='-lm'
 
 %install
 rm -rf %{buildroot} installed-docs
