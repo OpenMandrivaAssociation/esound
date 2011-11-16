@@ -4,18 +4,19 @@
 
 Summary:	The Enlightened Sound Daemon
 Name:		esound
-Version: 0.2.41
-Release: %mkrel 5
+Version:	0.2.41
+Release:	6
 License:	LGPLv2+
 Group:		System/Servers
+URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
 
 Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/esound/esound-%{version}.tar.bz2
 # (fc) 0.2.28 default options : increase spawn process waiting time, release device after 2s of inactivity
 Patch0:		esound-0.2.37-defaultoptions.patch
-URL:		ftp://ftp.gnome.org/pub/GNOME/sources/esound/
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
-BuildRequires: audiofile-devel
-BuildRequires: docbook-utils docbook-dtd412-xml
+
+BuildRequires: pkgconfig(audiofile)
+BuildRequires: docbook-utils
+BuildRequires: docbook-dtd412-xml
 
 %description
 EsounD (the Enlightened Sound Daemon) is a server process that allows multiple
@@ -28,6 +29,7 @@ EsounD mixes several audio streams for playback by a single audio device.
 %package utils
 Summary: Utilities for EsounD
 Group: Sound
+Requires: %{libname} = %{version}-%{release}
 
 %description utils
 Utility applications for EsounD
@@ -36,7 +38,6 @@ Utility applications for EsounD
 Summary: Libraries for EsounD
 Group: System/Libraries
 Provides: libesound
-Requires: esound
 
 %description -n %{libname}
 These are the libraries for EsounD.
@@ -44,9 +45,7 @@ These are the libraries for EsounD.
 %package -n %{develname}
 Summary:	Includes and more to develop EsounD applications
 Group:		Development/C
-Requires:	audiofile-devel 
-Requires:	%{libname} = %{version}
-Provides: 	libesound-devel
+Requires:	%{libname} = %{version}-%{release}
 Provides:	esound-devel
 Obsoletes: 	%{libname}-devel
 
@@ -60,29 +59,24 @@ applications.
 
 %build
 
-%configure2_5x --with-libwrap --disable-alsa
+%configure2_5x \
+	--disable-static \
+	--with-libwrap \
+	--disable-alsa
+
 %make
 
 %install
-rm -rf %buildroot installed-docs
+rm -rf %{buildroot} installed-docs
 %makeinstall_std
-mv %buildroot%_datadir/doc/esound installed-docs
+mv %{buildroot}%_datadir/doc/esound installed-docs
+
+find %{buildroot} -name "*.la" -exec rm -rf {} \;
 
 # (cg) We no longer ship the actual deamon - PulseAudio does this these days
 rm -f %{buildroot}%{_sysconfdir}/esd.conf %{buildroot}%{_bindir}/esd %{buildroot}%{_mandir}/man1/esd.1*
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files utils
-%defattr(-, root, root)
 %doc installed-docs/*
 %doc AUTHORS INSTALL NEWS README TIPS TODO
 %{_bindir}/esdcat
@@ -97,17 +91,13 @@ rm -rf %{buildroot}
 %{_mandir}/man1/esd[a-z]*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/lib*.so.%{major}*
 
 %files -n %{develname}
-%defattr(-, root, root)
 %{_bindir}/esd-config
 %{_includedir}/*
 %{_datadir}/aclocal/*
-%{_libdir}/*a
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
 %{_mandir}/man1/esd-config.1*
-
 
