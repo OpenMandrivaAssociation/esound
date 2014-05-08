@@ -86,7 +86,11 @@ rm -f %{buildroot}%{_sysconfdir}/esd.conf \
 %{_mandir}/man1/esd[a-z]*
 
 %files -n %{libname}
-%{_libdir}/libesound.so.%{major}*
+%{_libdir}/libesd.so.%{major}
+%{_libdir}/libesd.so.%{major}.2.39
+%{_libdir}/libesddsp.so.%{major}
+%{_libdir}/libesddsp.so.%{major}.2.39
+
 
 %files -n %{devname}
 %{_bindir}/esd-config
